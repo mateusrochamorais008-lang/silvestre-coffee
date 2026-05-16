@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Silvestre Coffee — Cafeteria gourmet com experiências únicas em café especial, croissants artesanais e sobremesas premium.">
+  <title>Silvestre Coffee — Gourmet & Especial</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+  <style>
+    /* ══════════════════════════════════════
+       RESET & ROOT
+    ══════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black:     #080808;
+      --dark:      #111111;
+      --mid:       #1c1c1c;
+      --surface:   #242424;
+      --line:      #2e2e2e;
+      --muted:     #666666;
+      --silver:    #9a9a9a;
+      --white:     #f4f0ea;
+      --cream:     #ede7da;
+      --gold:      #c9a96e;
+      --gold-dim:  #a07d45;
+      --ember:     #d4804a;
+
+      --ff-serif:  'Cormorant Garamond', Georgia, serif;
+      --ff-sans:   'Montserrat', sans-serif;
+      --ff-italic: 'Playfair Display', serif;
+
+      --nav-h: 72px;
+      --section-pad: clamp(5rem, 10vw, 9rem);
+      --gap: clamp(1rem, 3vw, 2rem);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--ff-sans);
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Custom cursor ── */
+    .cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, opacity 0.3s ease;
+      will-change: transform;
+    }
+    .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 38px; height: 38px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.35s cubic-bezier(.23,1,.32,1),
+                  height 0.35s cubic-bezier(.23,1,.32,1),
+                  border-color 0.35s ease,
+                  opacity 0.35s ease;
+      opacity: 0.45;
+      will-change: transform;
+    }
+    .cursor.is-hover { width: 6px; height: 6px; background: var(--white); }
+    .cursor-ring.is-hover { width: 52px; height: 52px; border-color: var(--white); opacity: 0.7; }
+    .cursor.is-click { width: 14px; height: 14px; background: var(--ember); }
+    .cursor-ring.is-click { width: 28px; height: 28px; opacity: 1; }
+    body:hover .cursor { opacity: 1; }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    /* ══════════════════════════════════════
+       TYPOGRAPHY
+    ══════════════════════════════════════ */
+    h1, h2, h3, h4 {
+      font-family: var(--ff-serif);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .label {
+      font-family: var(--ff-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .italic {
+      font-family: var(--ff-italic);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      z-index: 100;
+      background: rgba(8,8,8,0.97);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      transition: box-shadow 0.4s ease;
+    }
+
+    nav.scrolled {
+      box-shadow: 0 4px 40px rgba(0,0,0,0.6);
+    }
+
+    .nav-logo {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--ff-sans);
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: none;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--ff-serif);
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-weight: 300;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+      overflow: hidden;
+    }
+
+    /* Cinematic vignette */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, rgba(8,8,8,0.5) 60%, rgba(8,8,8,0.95) 100%),
+        linear-gradient(to top, rgba(8,8,8,1) 0%, transparent 40%);
+      z-index: 1;
+    }
+
+    /* Animated coffee "steam" lines */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--dark);
+      overflow: hidden;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 140%;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim) 20%, var(--gold) 50%, var(--gold-dim) 80%, transparent);
+      opacity: 0.15;
+      animation: steam 6s ease-in-out infinite;
+    }
+
+    @keyframes steam {
+      0%, 100% { transform: translateX(-50%) scaleX(1); opacity: 0.1; }
+      50% { transform: translateX(-45%) scaleX(1.5); opacity: 0.2; }
+    }
+
+    /* Large decorative circle */
+    .hero-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(90vw, 650px);
+      height: min(90vw, 650px);
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.08);
+      z-index: 1;
+      animation: pulse-ring 8s ease-in-out infinite;
+    }
+
+    .hero-circle::before {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.06);
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50% { transform: translate(-50%, -50%) scale(1.03); opacity: 1; }
+    }
+
+    /* Coffee cup SVG abstract */
+    .hero-visual {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      opacity: 0.04;
+    }
+
+    /* ── Embalagem hero ── */
+    .hero-bag {
+      position: absolute;
+      right: clamp(-2rem, -2vw, 0rem);
+      bottom: 0;
+      height: 92%;
+      max-height: 820px;
+      width: auto;
+      z-index: 2;
+      pointer-events: none;
+      mix-blend-mode: lighten;
+      filter:
+        drop-shadow(-40px 0px 80px rgba(201,169,110,0.12))
+        drop-shadow(-20px 20px 40px rgba(0,0,0,0.7));
+      animation: bag-float 6s ease-in-out infinite;
+      transform-origin: bottom center;
+      user-select: none;
+    }
+
+    @keyframes bag-float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33%       { transform: translateY(-14px) rotate(0.6deg); }
+      66%       { transform: translateY(-6px) rotate(-0.4deg); }
+    }
+
+    @media (max-width: 500px) {
+      .hero-bag { height: 65%; opacity: 0.55; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: min(55%, 700px);
+    }
+
+    @media (max-width: 700px) {
+      .hero-content { max-width: 100%; }
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      line-height: 0.95;
+      margin-bottom: 1.2rem;
+      color: var(--white);
+    }
+
+    .hero-title em {
+      font-family: var(--ff-italic);
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+      color: var(--silver);
+      letter-spacing: 0.05em;
+      max-width: 440px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: var(--gold);
+      color: var(--black);
+      font-family: var(--ff-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .btn-primary:hover { background: var(--cream); transform: translateY(-2px); }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      border: 1px solid var(--line);
+      color: var(--silver);
+      font-family: var(--ff-sans);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--white); transform: translateY(-2px); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      right: clamp(1.5rem, 5vw, 4rem);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.5;
+    }
+    .scroll-hint span {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: drip 2s ease-in-out infinite;
+    }
+    @keyframes drip {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ══════════════════════════════════════
+       MANIFESTO / ABOUT
+    ══════════════════════════════════════ */
+    .about {
+      padding: var(--section-pad) clamp(1.5rem, 8vw, 8rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: center;
+      border-top: 1px solid var(--line);
+    }
+
+    .about-text .label { margin-bottom: 1.5rem; }
+
+    .about-headline {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .about-body {
+      color: var(--silver);
+      font-size: 0.9rem;
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--mid);
+      border: 1px solid var(--line);
+      padding: clamp(2rem, 4vw, 3.5rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--ember));
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .stat-num {
+      font-family: var(--ff-serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .about-quote {
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line);
+      font-family: var(--ff-italic);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--cream);
+      line-height: 1.6;
+    }
+
+    .about-quote cite {
+      display: block;
+      margin-top: 1rem;
+      font-family: var(--ff-sans);
+      font-style: normal;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════
+       MENU SECTION
+    ══════════════════════════════════════ */
+    .menu-section {
+      padding: var(--section-pad) clamp(1.5rem, 6vw, 5rem);
+      border-top: 1px solid var(--line);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: clamp(3rem, 6vw, 5rem);
+    }
+
+    .section-header .label { margin-bottom: 1rem; }
+
+    .section-title {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--white);
+    }
+
+    .section-title em {
+      font-family: var(--ff-italic);
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    /* Category tabs */
+    .menu-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--ff-sans);
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.3rem;
+      cursor: none;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--white);
+    }
+
+    .tab-btn.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--black);
+    }
+
+    /* Menu panels */
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+
+    /* Category header inside panel */
+    .cat-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .cat-header h3 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      color: var(--white);
+    }
+
+    .cat-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* Items grid */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+      gap: 1px;
+      background: var(--line);
+      margin-bottom: 3.5rem;
+    }
+
+    .item-card {
+      background: var(--dark);
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      transition: background 0.3s ease;
+    }
+
+    .item-card:hover {
+      background: var(--mid);
+    }
+
+    .item-info { flex: 1; }
+
+    .item-name {
+      font-family: var(--ff-serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.01em;
+    }
+
+    .item-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .item-price {
+      font-family: var(--ff-serif);
+      font-size: 1rem;
+      color: var(--gold);
+      white-space: nowrap;
+      font-weight: 300;
+    }
+
+    /* Adicionais */
+    .extras-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .extra-card {
+      background: var(--dark);
+      padding: 1rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--silver);
+      transition: background 0.3s ease;
+    }
+
+    .extra-card:hover { background: var(--mid); }
+
+    .extra-price {
+      color: var(--gold);
+      font-family: var(--ff-serif);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════════════════
+       EXPERIENCE STRIP
+    ══════════════════════════════════════ */
+    .strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 8vw, 8rem);
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .strip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .strip-title {
+      font-size: clamp(2rem, 5vw, 4rem);
+      max-width: 700px;
+    }
+
+    .strip-title em {
+      font-family: var(--ff-italic);
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .strip-body {
+      color: var(--silver);
+      font-size: 0.875rem;
+      max-width: 500px;
+      line-height: 1.9;
+    }
+
+    /* ══════════════════════════════════════
+       CONTACT
+    ══════════════════════════════════════ */
+    .contact {
+      padding: var(--section-pad) clamp(1.5rem, 8vw, 8rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: start;
+      border-top: 1px solid var(--line);
+    }
+
+    .contact-left .label { margin-bottom: 1.5rem; }
+
+    .contact-title {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-body {
+      color: var(--silver);
+      font-size: 0.875rem;
+      line-height: 1.9;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--silver);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-link:last-child { border-bottom: none; }
+
+    .contact-link:hover { color: var(--white); }
+
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .contact-link:hover .contact-icon {
+      border-color: var(--gold);
+      background: rgba(201,169,110,0.08);
+    }
+
+    .contact-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--gold);
+    }
+
+    /* Contact right — Hours */
+    .hours-card {
+      background: var(--mid);
+      border: 1px solid var(--line);
+      padding: clamp(2rem, 4vw, 3rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hours-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--ember));
+    }
+
+    .hours-card .label { margin-bottom: 2rem; }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.78rem;
+    }
+
+    .hours-row:last-child { border-bottom: none; }
+
+    .hours-day { color: var(--silver); letter-spacing: 0.05em; }
+
+    .hours-time {
+      font-family: var(--ff-serif);
+      font-size: 0.95rem;
+      color: var(--cream);
+    }
+
+    .hours-badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      background: rgba(201,169,110,0.15);
+      border: 1px solid rgba(201,169,110,0.3);
+      color: var(--gold);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2.5rem clamp(1.5rem, 6vw, 5rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: var(--ff-serif);
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-logo span { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .footer-socials a {
+      width: 32px; height: 32px;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.7rem;
+      transition: all 0.3s ease;
+    }
+
+    .footer-socials a:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .contact {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: clamp(2.8rem, 14vw, 5rem); }
+
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow { animation: fadeUp 1s ease 0.2s both; }
+    .hero-title   { animation: fadeUp 1s ease 0.4s both; }
+    .hero-sub     { animation: fadeUp 1s ease 0.6s both; }
+    .hero-ctas    { animation: fadeUp 1s ease 0.8s both; }
+
+    /* Focus visible */
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- Skip link -->
+  <a href="#menu" style="position:absolute;top:-40px;left:0;padding:0.5rem 1rem;background:var(--gold);color:var(--black);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;z-index:9999;transition:top 0.3s;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Ir ao cardápio</a>
+
+  <!-- ══ NAV ══ -->
+  <nav id="nav" role="navigation" aria-label="Navegação principal">
+    <a href="#" class="nav-logo" aria-label="Silvestre Coffee — início">Silvestre <span>Coffee</span></a>
+
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#menu">Cardápio</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Menu de navegação">
+    <a href="#sobre" class="mobile-nav-link">Sobre</a>
+    <a href="#menu" class="mobile-nav-link">Cardápio</a>
+    <a href="#contato" class="mobile-nav-link">Contato</a>
+  </div>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" aria-label="Apresentação Silvestre Coffee">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-circle"></div>
+
+      <!-- Decorative SVG abstract -->
+      <svg class="hero-visual" width="500" height="500" viewBox="0 0 500 500" aria-hidden="true">
+        <circle cx="250" cy="250" r="200" fill="none" stroke="#c9a96e" stroke-width="0.5"/>
+        <circle cx="250" cy="250" r="140" fill="none" stroke="#c9a96e" stroke-width="0.5"/>
+        <circle cx="250" cy="250" r="80" fill="none" stroke="#c9a96e" stroke-width="0.5"/>
+        <line x1="50" y1="250" x2="450" y2="250" stroke="#c9a96e" stroke-width="0.3"/>
+        <line x1="250" y1="50" x2="250" y2="450" stroke="#c9a96e" stroke-width="0.3"/>
+      </svg>
+    </div>
+
+    <!-- Embalagem Silvestre Coffee -->
+    <img
+      src="embalagem.png"
+      alt="Embalagem Silvestre Coffee — Gourmet Wild Blend"
+      class="hero-bag"
+      width="600"
+      height="900"
+      draggable="false"
+    >
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="label">Cafeteria Gourmet</span>
+      </div>
+
+      <h1 class="hero-title">
+        Silvestre<br>
+        <em>Coffee</em>
+      </h1>
+
+      <p class="hero-sub">
+        Onde cada xícara é um ritual. Grãos selecionados, receitas autorais e uma experiência que permanece.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#menu" class="btn-primary">Ver Cardápio</a>
+        <a href="#contato" class="btn-ghost">Fale Conosco</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ══ SOBRE ══ -->
+  <section class="about" id="sobre" aria-label="Sobre a Silvestre Coffee">
+    <div class="about-text" data-aos="fade-right">
+      <p class="label">Nossa história</p>
+      <h2 class="about-headline">
+        O café como linguagem,<br>
+        <em class="italic">não como rotina.</em>
+      </h2>
+      <p class="about-body">
+        A Silvestre Coffee nasceu da crença de que uma boa xícara de café pode mudar o ritmo do dia. Trabalhamos com grãos especiais, receitas exclusivas e ingredientes de alta qualidade para criar experiências que vão além do comum.
+      </p>
+      <p class="about-body">
+        Da linha signature aos croissants artesanais, cada item do nosso cardápio é pensado com cuidado — porque acreditamos que o gourmet não é luxo, é dedicação.
+      </p>
+    </div>
+
+    <div class="about-visual" data-aos="fade-left" data-aos-delay="100">
+      <div class="about-card">
+        <div class="about-stats">
+          <div>
+            <span class="stat-num">50+</span>
+            <span class="stat-label">Itens no cardápio</span>
+          </div>
+          <div>
+            <span class="stat-num">100%</span>
+            <span class="stat-label">Grãos especiais</span>
+          </div>
+          <div>
+            <span class="stat-num">18h</span>
+            <span class="stat-label">Cold brew lento</span>
+          </div>
+          <div>
+            <span class="stat-num">★ 5</span>
+            <span class="stat-label">Experiência gourmet</span>
+          </div>
+        </div>
+
+        <blockquote class="about-quote">
+          "O tempo desacelera quando o café é bom."
+          <cite>— Silvestre Coffee</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MENU ══ -->
+  <section class="menu-section" id="menu" aria-label="Cardápio Silvestre Coffee">
+    <div class="section-header" data-aos="fade-up">
+      <p class="label">O que servimos</p>
+      <h2 class="section-title">Nosso <em>Cardápio</em></h2>
+    </div>
+
+    <!-- Tabs -->
+    <div class="menu-tabs" role="tablist" aria-label="Categorias do cardápio" data-aos="fade-up" data-aos-delay="100">
+      <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="panel-cafes"      data-tab="cafes">☕ Cafés</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-signature"  data-tab="signature">✨ Signature</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-gelados"    data-tab="gelados">❄️ Gelados</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-croissants" data-tab="croissants">🥐 Croissants</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-sanduiches" data-tab="sanduiches">🥪 Sanduíches</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-doces"      data-tab="doces">🍰 Doces</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-especiais"  data-tab="especiais">🧇 Especiais</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-bebidas"    data-tab="bebidas">🧋 Bebidas</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-fit"        data-tab="fit">🥑 Fit & Vegano</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-adicionais" data-tab="adicionais">🎁 Adicionais</button>
+    </div>
+
+    <!-- ── Panel: Cafés Tradicionais ── -->
+    <div class="menu-panel active" id="panel-cafes" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Cafés Tradicionais</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Espresso Italiano</span><span class="item-desc">Café intenso e encorpado</span></div><span class="item-price">R$ 7</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Espresso Duplo</span><span class="item-desc">Dose dupla premium</span></div><span class="item-price">R$ 10</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Café Coado Especial</span><span class="item-desc">Grãos selecionados</span></div><span class="item-price">R$ 9</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Cappuccino Tradicional</span><span class="item-desc">Café, leite vaporizado e canela</span></div><span class="item-price">R$ 15</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Latte Cremoso</span><span class="item-desc">Café suave com leite cremoso</span></div><span class="item-price">R$ 16</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="200"><div class="item-info"><span class="item-name">Mocha Belga</span><span class="item-desc">Chocolate belga + espresso</span></div><span class="item-price">R$ 19</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="240"><div class="item-info"><span class="item-name">Flat White</span><span class="item-desc">Café forte e textura aveludada</span></div><span class="item-price">R$ 18</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="280"><div class="item-info"><span class="item-name">Affogato Italiano</span><span class="item-desc">Espresso com sorvete artesanal</span></div><span class="item-price">R$ 22</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Signature ── -->
+    <div class="menu-panel" id="panel-signature" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Linha Signature — Silvestre</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Latte Aurora</span><span class="item-desc">Baunilha, caramelo e espuma cremosa</span></div><span class="item-price">R$ 22</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Cappuccino Black Forest</span><span class="item-desc">Chocolate 70% e toque de cereja</span></div><span class="item-price">R$ 24</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Mocha Gold</span><span class="item-desc">Chocolate belga e creme especial</span></div><span class="item-price">R$ 26</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Café Silvestre</span><span class="item-desc">Receita exclusiva da casa</span></div><span class="item-price">R$ 28</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Latte de Pistache Premium</span><span class="item-desc">Creme de pistache importado</span></div><span class="item-price">R$ 29</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="200"><div class="item-info"><span class="item-name">Café Defumado</span><span class="item-desc">Finalizado com fumaça aromática</span></div><span class="item-price">R$ 32</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Gelados ── -->
+    <div class="menu-panel" id="panel-gelados" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Cafés Gelados</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Cold Brew Artesanal</span><span class="item-desc">Extração lenta por 18h</span></div><span class="item-price">R$ 18</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Frappuccino Caramelo</span><span class="item-desc">Café gelado batido</span></div><span class="item-price">R$ 24</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Frappuccino Oreo</span><span class="item-desc">Cookies & cream</span></div><span class="item-price">R$ 26</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Mocha Ice Blend</span><span class="item-desc">Chocolate gelado premium</span></div><span class="item-price">R$ 27</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Latte Gelado de Baunilha</span><span class="item-desc">Cremoso e refrescante</span></div><span class="item-price">R$ 22</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Croissants ── -->
+    <div class="menu-panel" id="panel-croissants" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Croissants Artesanais</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Croissant Tradicional</span><span class="item-desc">Massa francesa amanteigada</span></div><span class="item-price">R$ 14</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Croissant Parma & Brie</span><span class="item-desc">Presunto parma e queijo brie</span></div><span class="item-price">R$ 28</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Croissant Frango Cremoso</span><span class="item-desc">Frango ao molho especial</span></div><span class="item-price">R$ 22</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Croissant Caprese</span><span class="item-desc">Mussarela, tomate e pesto</span></div><span class="item-price">R$ 24</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Croissant Salmão Defumado</span><span class="item-desc">Cream cheese e salmão</span></div><span class="item-price">R$ 34</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Sanduíches ── -->
+    <div class="menu-panel" id="panel-sanduiches" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Sanduíches Gourmet</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Ciabatta Parma</span><span class="item-desc">Parma, rúcula e parmesão</span></div><span class="item-price">R$ 29</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Brioche de Costela</span><span class="item-desc">Costela desfiada artesanal</span></div><span class="item-price">R$ 32</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Toast Avocado</span><span class="item-desc">Abacate e ovo pochê</span></div><span class="item-price">R$ 27</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Bagel de Salmão</span><span class="item-desc">Cream cheese premium</span></div><span class="item-price">R$ 36</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Panini Italiano</span><span class="item-desc">Queijos especiais e tomate</span></div><span class="item-price">R$ 25</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Doces ── -->
+    <div class="menu-panel" id="panel-doces" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Sobremesas Gourmet</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Brownie Belga</span><span class="item-desc">Chocolate intenso</span></div><span class="item-price">R$ 18</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Brownie Vulcão</span><span class="item-desc">Nutella derretida</span></div><span class="item-price">R$ 24</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Cheesecake Frutas Vermelhas</span><span class="item-desc">Receita premium</span></div><span class="item-price">R$ 23</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Cheesecake Pistache</span><span class="item-desc">Pistache cremoso</span></div><span class="item-price">R$ 28</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Banoffee Artesanal</span><span class="item-desc">Banana, doce de leite e chantilly</span></div><span class="item-price">R$ 22</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="200"><div class="item-info"><span class="item-name">Tiramisù Italiano</span><span class="item-desc">Café e mascarpone</span></div><span class="item-price">R$ 25</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="240"><div class="item-info"><span class="item-name">Petit Gateau</span><span class="item-desc">Chocolate quente + sorvete</span></div><span class="item-price">R$ 29</span></div>
+      </div>
+
+      <div class="cat-header" data-aos="fade-up" style="margin-top:3rem;">
+        <h3>Doces de Vitrine</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Cookie Americano</span><span class="item-desc">Tradicional artesanal</span></div><span class="item-price">R$ 12</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Cookie Nutella</span><span class="item-desc">Recheado</span></div><span class="item-price">R$ 16</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Cinnamon Roll</span><span class="item-desc">Cobertura cremosa</span></div><span class="item-price">R$ 18</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Macarons Franceses</span><span class="item-desc">Unidade</span></div><span class="item-price">R$ 9</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Donut Artesanal</span><span class="item-desc">Coberturas variadas</span></div><span class="item-price">R$ 15</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Especiais ── -->
+    <div class="menu-panel" id="panel-especiais" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Especiais Instagramáveis</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Chocolate Quente Vulcão</span><span class="item-desc">Explosão cremosa</span></div><span class="item-price">R$ 32</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Waffle Belga Supreme</span><span class="item-desc">Frutas e chocolate</span></div><span class="item-price">R$ 34</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Milkshake Monster</span><span class="item-desc">Torre de chantilly e doces</span></div><span class="item-price">R$ 38</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Café na Taça</span><span class="item-desc">Apresentação premium</span></div><span class="item-price">R$ 29</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Croffle Pistache</span><span class="item-desc">Croissant waffle gourmet</span></div><span class="item-price">R$ 31</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Bebidas ── -->
+    <div class="menu-panel" id="panel-bebidas" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Bebidas Especiais</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Soda Italiana</span><span class="item-desc">Sabores artesanais</span></div><span class="item-price">R$ 17</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Smoothie Vermelho</span><span class="item-desc">Frutas vermelhas naturais</span></div><span class="item-price">R$ 22</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Milkshake Oreo</span><span class="item-desc">Cremoso premium</span></div><span class="item-price">R$ 28</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Milkshake Pistache</span><span class="item-desc">Pistache gourmet</span></div><span class="item-price">R$ 34</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Chá Gelado Especial</span><span class="item-desc">Receita da casa</span></div><span class="item-price">R$ 16</span></div>
+      </div>
+
+      <div class="cat-header" data-aos="fade-up" style="margin-top:3rem;">
+        <h3>Chás Premium</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Chai Latte</span><span class="item-desc">Especiarias indianas</span></div><span class="item-price">R$ 21</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Matcha Latte</span><span class="item-desc">Matcha premium japonês</span></div><span class="item-price">R$ 25</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Chá Frutas Vermelhas</span><span class="item-desc">Blend artesanal</span></div><span class="item-price">R$ 15</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Chá Preto Inglês</span><span class="item-desc">Tradicional premium</span></div><span class="item-price">R$ 14</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Fit & Vegano ── -->
+    <div class="menu-panel" id="panel-fit" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Linha Fit & Vegana</h3>
+      </div>
+      <div class="items-grid">
+        <div class="item-card" data-aos="fade-up" data-aos-delay="0"><div class="item-info"><span class="item-name">Toast Vegano</span><span class="item-desc">Abacate e tomate</span></div><span class="item-price">R$ 24</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="40"><div class="item-info"><span class="item-name">Brownie Zero Açúcar</span><span class="item-desc">Receita fit</span></div><span class="item-price">R$ 19</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="80"><div class="item-info"><span class="item-name">Smoothie Proteico</span><span class="item-desc">Banana e whey</span></div><span class="item-price">R$ 26</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="120"><div class="item-info"><span class="item-name">Cappuccino Vegano</span><span class="item-desc">Leite vegetal</span></div><span class="item-price">R$ 18</span></div>
+        <div class="item-card" data-aos="fade-up" data-aos-delay="160"><div class="item-info"><span class="item-name">Bowl Fit Premium</span><span class="item-desc">Frutas e granola</span></div><span class="item-price">R$ 27</span></div>
+      </div>
+    </div>
+
+    <!-- ── Panel: Adicionais ── -->
+    <div class="menu-panel" id="panel-adicionais" role="tabpanel">
+      <div class="cat-header" data-aos="fade-up">
+        <h3>Adicionais</h3>
+      </div>
+      <div class="extras-grid">
+        <div class="extra-card" data-aos="fade-up" data-aos-delay="0"><span>Chantilly Artesanal</span><span class="extra-price">+ R$ 4</span></div>
+        <div class="extra-card" data-aos="fade-up" data-aos-delay="40"><span>Nutella</span><span class="extra-price">+ R$ 5</span></div>
+        <div class="extra-card" data-aos="fade-up" data-aos-delay="80"><span>Creme de Pistache</span><span class="extra-price">+ R$ 7</span></div>
+        <div class="extra-card" data-aos="fade-up" data-aos-delay="120"><span>Leite Vegetal</span><span class="extra-price">+ R$ 4</span></div>
+        <div class="extra-card" data-aos="fade-up" data-aos-delay="160"><span>Sorvete Artesanal</span><span class="extra-price">+ R$ 8</span></div>
+        <div class="extra-card" data-aos="fade-up" data-aos-delay="200"><span>Calda Belga</span><span class="extra-price">+ R$ 4</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ STRIP ══ -->
+  <div class="strip" data-aos="fade-up">
+    <p class="label">A experiência completa</p>
+    <h2 class="strip-title">
+      Cada detalhe foi pensado<br>
+      <em>para o seu momento.</em>
+    </h2>
+    <p class="strip-body">
+      Do grão à xícara, da vitrine ao prato — na Silvestre Coffee, a qualidade não é exceção, é padrão.
+    </p>
+    <a href="https://wa.me/5515992871828" class="btn-primary" target="_blank" rel="noopener noreferrer">Fazer Pedido via WhatsApp</a>
+  </div>
+
+  <!-- ══ CONTATO ══ -->
+  <section class="contact" id="contato" aria-label="Contato e horários">
+    <div class="contact-left" data-aos="fade-right">
+      <p class="label">Fale conosco</p>
+      <h2 class="contact-title">Estamos<br><em class="italic">aqui.</em></h2>
+      <p class="contact-body">
+        Entre em contato pelo WhatsApp, e-mail ou nos siga no Instagram para ficar por dentro das novidades e lançamentos da Silvestre Coffee.
+      </p>
+
+      <div class="contact-links">
+        <a href="https://wa.me/5515992871828" class="contact-link" target="_blank" rel="noopener noreferrer">
+          <div class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <div>
+            <div style="color:var(--white);font-size:0.75rem;margin-bottom:0.2rem;">(15) 99287-1828</div>
+            <div style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;">WhatsApp</div>
+          </div>
+        </a>
+
+        <a href="mailto:mateusrochamorais008@gmail.com" class="contact-link">
+          <div class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div>
+            <div style="color:var(--white);font-size:0.75rem;margin-bottom:0.2rem;">mateusrochamorais008@gmail.com</div>
+            <div style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;">E-mail</div>
+          </div>
+        </a>
+
+        <a href="https://instagram.com/trombaarte" class="contact-link" target="_blank" rel="noopener noreferrer">
+          <div class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+          <div>
+            <div style="color:var(--white);font-size:0.75rem;margin-bottom:0.2rem;">@trombaarte</div>
+            <div style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;">Instagram</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div data-aos="fade-left" data-aos-delay="100">
+      <div class="hours-card">
+        <p class="label">Horário de funcionamento</p>
+        <div class="hours-row">
+          <span class="hours-day">Segunda — Sexta</span>
+          <span class="hours-time">08h — 21h</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Sábado</span>
+          <span class="hours-time">09h — 22h</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Domingo</span>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.3rem;">
+            <span class="hours-time">10h — 18h</span>
+            <span class="hours-badge">Brunch especial</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <span class="footer-logo">Silvestre <span>Coffee</span></span>
+    <span class="footer-copy">© 2025 Silvestre Coffee. Todos os direitos reservados.</span>
+    <div class="footer-socials">
+      <a href="https://wa.me/5515992871828" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">W</a>
+      <a href="https://instagram.com/trombaarte" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+      <a href="mailto:mateusrochamorais008@gmail.com" aria-label="E-mail">@</a>
+    </div>
+  </footer>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    // ── AOS Init ──
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 60 });
+
+    // ── Custom cursor ──
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top  = mouseY + 'px';
+    });
+
+    // Smooth ring follow via rAF
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.10;
+      ringY += (mouseY - ringY) * 0.10;
+      ring.style.left = ringX + 'px';
+      ring.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    // Hover state via CSS classes
+    const hoverTargets = 'a, button, .item-card, .extra-card, .tab-btn, .nav-logo';
+    document.querySelectorAll(hoverTargets).forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('is-hover');
+        ring.classList.add('is-hover');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('is-hover');
+        ring.classList.remove('is-hover');
+      });
+    });
+
+    // Click pulse
+    document.addEventListener('mousedown', () => {
+      cursor.classList.add('is-click');
+      ring.classList.add('is-click');
+    });
+    document.addEventListener('mouseup', () => {
+      cursor.classList.remove('is-click');
+      ring.classList.remove('is-click');
+    });
+
+    // ── Nav scroll ──
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Hamburger / Mobile menu ──
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen.toString());
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // ── Menu tabs ──
+    const tabBtns  = document.querySelectorAll('.tab-btn');
+    const panels   = document.querySelectorAll('.menu-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        const panel = document.getElementById('panel-' + target);
+        if (panel) {
+          panel.classList.add('active');
+          // Re-trigger AOS for newly visible items
+          AOS.refresh();
+        }
+      });
+    });
+
+    // ── Smooth anchor scroll ──
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
